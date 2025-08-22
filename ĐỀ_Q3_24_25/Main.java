@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+// Cô Thanh kêu cũng ổn ổn rồi
 
 public class Main {
     static Random rd = new Random();
