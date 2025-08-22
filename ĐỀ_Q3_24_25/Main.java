@@ -18,18 +18,24 @@ public class Main {
             barberThread.add(new Barber(i, shop));
             barberThread.get(i-1).start();
         }
-        for (int i = 1; i <= 35; i++){
-            customerThread.add(new Customer(i, shop));
+        int ith = 1;
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime <= 1000){
+            customerThread.add(new Customer(ith, shop));
             Thread.sleep(rd.nextInt(100));
-            customerThread.get(i-1).start();
+            customerThread.get(ith-1).start();
+            ith++;
+        }
+        Thread.sleep(1000); 
+
+        for (Customer c: customerThread){
+            c.interrupt();
         }
 
         for (Barber b: barberThread){
             b.interrupt();
         }
-        for (Customer c: customerThread){
-            c.interrupt();
-        }
+        
 
         for (Barber b: barberThread){
             b.join();
@@ -39,6 +45,10 @@ public class Main {
         }
         System.out.println("Done");
     }
+    private static int currentTimeMillis() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'currentTimeMillis'");
+    }
 }
 class Shop {
     public ReentrantLock mainLock = new ReentrantLock();
@@ -46,7 +56,6 @@ class Shop {
     public LinkedList<Barber> freeBarber = new LinkedList<>();
 
     public Shop(){
-
     }
 }
 
@@ -67,6 +76,7 @@ class Customer extends Thread {
        
     @Override
     public void run(){
+        
         try{
             this.shopLock.lockInterruptibly();
             try {
@@ -141,8 +151,4 @@ class Barber extends Thread{
             }
         }
     }
-
-
-
-
 }
