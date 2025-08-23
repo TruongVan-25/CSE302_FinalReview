@@ -133,11 +133,6 @@ class Barber extends Thread{
         return name;
     }
 
-    public void working() throws InterruptedException{
-        
-        
-    }
-
     @Override
     public void run(){
         while (!this.isInterrupted()){
