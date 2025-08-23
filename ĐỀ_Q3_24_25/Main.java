@@ -6,7 +6,24 @@ import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-// Cô Thanh kêu cũng ổn ổn rồi
+/*
+ * 
+Question 3 (40 marks)
+In a barbershop there are barbers and barber chairs. There are no waiting chairs in the barbershop. 
+If there are no customers to be served, the barbers go to sleep. 
+If a customer enters the barbershop and all barber chairs are occupied, then the customer leaves the shop. 
+If a customer enters the barbershop and there is a barber who is asleep, the customer wakes up the barber and get the haircut. 
+When the barber finishes cutting a customer's hair, he goes to sleep.
+
+Write a Java program to coordinate the barbers and the customers (using ReentrantLock and Condition classes/interfaces).
+a. Write Java programs for the barbers' function (15 marks)
+- Barber job implementation (10 marks)
+-Threads for n barbers (5 marks)
+b. Implement the customers' function (15 marks)
+- Customer job implementation (10 marks)
+- Threads for customers (5 marks)
+c. Write a main method to test your programs (10 marks)
+ */
 
 public class Main {
     static Random rd = new Random();
@@ -21,13 +38,12 @@ public class Main {
         }
         int ith = 1;
         long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime <= 1000){
+        while (System.currentTimeMillis() - startTime <= 3000){
             customerThread.add(new Customer(ith, shop));
-            Thread.sleep(rd.nextInt(100));
+            Thread.sleep(rd.nextInt(20));
             customerThread.get(ith-1).start();
             ith++;
         }
-        Thread.sleep(1000); 
 
         for (Customer c: customerThread){
             c.interrupt();
@@ -46,10 +62,7 @@ public class Main {
         }
         System.out.println("Done");
     }
-    private static int currentTimeMillis() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'currentTimeMillis'");
-    }
+
 }
 class Shop {
     public ReentrantLock mainLock = new ReentrantLock();
@@ -141,7 +154,7 @@ class Barber extends Thread{
                     // System.out.println("Barber " + name + " finishs cutting hair for " + this.customer.getNameID());
                     shopLock.unlock();
                     System.out.println("Customer " + this.customer.getNameID() + " is being served by barber " + this.name);
-                    Thread.sleep(rd.nextInt(500));
+                    Thread.sleep(rd.nextInt(100));
                     this.customer = null;
                 } finally {
                     if (shopLock.isHeldByCurrentThread())
